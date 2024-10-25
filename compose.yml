@@ -1,0 +1,56 @@
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: todoapps-postgres
+    restart: unless-stopped
+    env_file:
+      - secret/postgres.env
+    volumes:
+      - todoapps-postgres-volume:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d todoapp_2024 -U todoapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+        
+  frontend:
+    build:
+      context: ./frontend
+    container_name: todoapps-frontend
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes: 
+      - todoapps-static-volume:/www/static
+    depends_on:
+      - backend
+        
+  backend:
+    build:
+      context: ./backend
+    container_name: tosoapps-backend
+    env_file:
+      - secret/django.env
+    command: gunicorn taskapp.wsgi --workers=4 -b 0.0.0.0:8000
+    #command: tail -f /dev/null
+    volumes:
+      - todoapps-static-volume:/app/webapi/static
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8000"
+    restart: always
+    
+volumes:
+  todoapps-postgres-volume:
+    name: todoapps-postgres-volume
+    external: true
+  todoapps-static-volume:
+    name: todoapps-static-volume
+    external: true
+  
+
