@@ -18,7 +18,7 @@ const addTask = async () => {
   }).json();
 
   if (statusCode.value === 200) {
-    url.value = `/api/todo?id=${data.id}`
+    url.value = `/api/todo?id=${data.value.id}`
   }
   todo.value = "";
 };

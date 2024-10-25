@@ -33,6 +33,8 @@ SECRET_KEY = 'django-insecure-z!+hmcdk@%dt%(7#q$c=^ae2bch*2nr_6087jdmfv)5bwb9j@(
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://task-apps.io', 'https://localhost']
+
 
 
 # Application definition
