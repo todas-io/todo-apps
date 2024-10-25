@@ -37,7 +37,7 @@ services:
     command: gunicorn taskapp.wsgi --workers=4 -b 0.0.0.0:8000
     #command: tail -f /dev/null
     volumes:
-      - todoapps-static-volume:/app/webapi/static
+      - todoapps-static-volume:/app/taskapp/static
     depends_on:
       postgres:
         condition: service_healthy
